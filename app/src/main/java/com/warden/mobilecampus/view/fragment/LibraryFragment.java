@@ -1,59 +1,28 @@
-package com.warden.mobilecampus.Fragment;
+package com.warden.mobilecampus.view.fragment;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.PopupWindow;
 
-import com.warden.mobilecampus.Adapter.NewsAdapter;
 import com.warden.mobilecampus.R;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link OnFragmentInteractionListener} interface
+ * {@link LibraryFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link NewsFragment#newInstance} factory method to
+ * Use the {@link LibraryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NewsFragment extends Fragment {
+public class LibraryFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    private String[] tabs ={"校园新闻","招聘会","网络招聘"};
-    @BindView(R.id.tab_news)
-    TabLayout newsTab;
-    @BindView(R.id.btn_tab_select)
-    Button btnTabSelect;
-    @BindView(R.id.vp_news)
-    ViewPager newsViewPage;
-    private PopupWindow popupWindow;
-    private boolean isPopupWindowShowing = false;
-    private List<String> myChannels;
-    private List<String> otherChannels;
-
-    private NewsAdapter vpAdapter;
-    private RecyclerView PopRecyclerView;
-    Unbinder unbinder;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -61,7 +30,7 @@ public class NewsFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public NewsFragment() {
+    public LibraryFragment() {
         // Required empty public constructor
     }
 
@@ -71,11 +40,11 @@ public class NewsFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment NewsFragment.
+     * @return A new instance of fragment LibraryFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static NewsFragment newInstance(String param1, String param2) {
-        NewsFragment fragment = new NewsFragment();
+    public static LibraryFragment newInstance(String param1, String param2) {
+        LibraryFragment fragment = new LibraryFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -96,34 +65,7 @@ public class NewsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_news, container, false);
-        unbinder = ButterKnife.bind(this, view);
-
-        SharedPreferences sp = getActivity().getSharedPreferences("tabs", Context.MODE_PRIVATE);
-        String tabString = sp.getString("tabs", tabsToString());
-        tabs = stringToTabs(tabString);
-        String otherString = sp.getString("others", "");
-        String[] others = stringToTabs(otherString);
-        myChannels = (tabs == null ? new ArrayList<String>(): Arrays.asList(tabs));
-        otherChannels = (others == null ? new ArrayList<String>() : Arrays.asList(others));
-        //tab效果
-        vpAdapter = new NewsAdapter(getChildFragmentManager(),myChannels);
-        newsViewPage.setAdapter(vpAdapter);
-        newsViewPage.setOffscreenPageLimit(1);
-        newsTab.setupWithViewPager(newsViewPage);
-        if (myChannels.size() < 5) {
-            newsTab.setTabMode(TabLayout.MODE_FIXED);
-        }else {
-            newsTab.setTabMode(TabLayout.MODE_SCROLLABLE);
-        }
-
-        btnTabSelect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-        return view;
+        return inflater.inflate(R.layout.fragment_library, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -150,12 +92,6 @@ public class NewsFragment extends Fragment {
         mListener = null;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
-
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -169,18 +105,5 @@ public class NewsFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-    private String tabsToString() {
-        String s = "";
-        for (String str : tabs)
-            s += str + "-";
-        return s;
-    }
-
-    private String[] stringToTabs(String tabString) {
-        if (!tabString.equals(""))
-            return tabString.split("-");
-        else
-            return null;
     }
 }

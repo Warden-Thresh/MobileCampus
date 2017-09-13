@@ -1,11 +1,11 @@
-package com.warden.mobilecampus.Adapter;
+package com.warden.mobilecampus.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.ViewGroup;
 
-import com.warden.mobilecampus.Fragment.NewsListFragment;
+import com.warden.mobilecampus.view.fragment.NewsListFragment;
 
 import java.util.List;
 
