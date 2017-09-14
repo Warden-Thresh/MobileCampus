@@ -6,7 +6,7 @@ import java.util.List;
  * Created by Warden on 2017/9/13.
  */
 
-public class Career {
+public class Career<T> {
 
     /**
      * code : 1

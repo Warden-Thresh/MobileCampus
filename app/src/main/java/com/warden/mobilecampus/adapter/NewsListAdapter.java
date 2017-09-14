@@ -2,6 +2,7 @@ package com.warden.mobilecampus.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +40,9 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemViewType(int position) {
-        if (position == 0) return HEADER;
+        if (headerView != null && position == 0) {
+            return HEADER;
+        }
         if (position + 1 == getItemCount()) return FOOTER;
         return NORMAL;
 
@@ -48,6 +51,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (headerView !=null && viewType == HEADER) {
+            Log.d("holder","header");
             return new ViewHolderNormal(headerView);
         } else if (viewType ==FOOTER){
             TextView view = (TextView) LayoutInflater.from(mContext).inflate(R.layout.layout_footer, parent, false);
@@ -62,22 +66,27 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if (getItemViewType(position) == HEADER) {
             return;
         }
-        final int pos = getRealPosition(holder);
-        final Recruitment recruitment = mRecruitmentList.get(pos);
+        if (getItemViewType(position) == FOOTER) {
+            ViewHolderFooter footerHolder = (ViewHolderFooter) holder;
+            footerHolder.text.setText("shuaxc");
+            return;
+        }
+
         if (getItemViewType(position) == NORMAL) {
+            final int pos = getRealPosition(holder);
+            final Recruitment recruitment = mRecruitmentList.get(pos);
             ViewHolderNormal holderNormal = (ViewHolderNormal) holder;
             holderNormal.tv_title.setText(recruitment.getCompany_name());
             holderNormal.tv_author.setText(recruitment.getAddress());
             holderNormal.tv_zan.setText(recruitment.getView_count());
             Glide.with(mContext).load(recruitment.getLogo()).into(holderNormal.iv_item_news_detail_rv);
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(mContext,recruitment.getCompany_name(), Toast.LENGTH_SHORT).show();
+                }
+            });
         }
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(mContext,recruitment.getCompany_name(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
     }
 
     public void updateList(List<Recruitment> list) {

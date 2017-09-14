@@ -16,6 +16,7 @@ import android.widget.PopupWindow;
 
 import com.warden.mobilecampus.adapter.NewsAdapter;
 import com.warden.mobilecampus.R;
+import com.warden.mobilecampus.util.JobHint;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,7 +40,7 @@ public class NewsFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private String[] tabs ={"校园新闻","招聘会","网络招聘"};
+    private String[] tabs ={"校内宣讲会","校外宣讲会","双选会","在线招聘","正式岗位"};
     @BindView(R.id.tab_news)
     TabLayout newsTab;
     @BindView(R.id.btn_tab_select)

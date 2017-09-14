@@ -6,6 +6,8 @@ import android.os.Message;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.warden.mobilecampus.api.CareerService;
+import com.warden.mobilecampus.api.ServiceManager;
 import com.warden.mobilecampus.bean.Career;
 import com.warden.mobilecampus.bean.Recruitment;
 import com.warden.mobilecampus.contract.NewsListContract;
@@ -15,48 +17,40 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
+import retrofit2.Call;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
+import rx.Observable;
+import rx.Scheduler;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Warden on 2017/9/13.
  */
 
 public class NewsListPresenter implements NewsListContract.Presenter{
-    private final int ON_SUCCESS = 0;
-    private final int ON_FAILURE = 1;
+
+    public static final String INNER_RECRUITMENT_HINT = "校内宣讲会";
+    public static final String OUTER_RECRUITMENT_HINT = "校外宣讲会";
+    public static final String JOB_FAIRS_HINT = "双选会";
+    public static final String ONLINE_RECRUITMENT = "在线招聘";
+    public static final String JOBS_HINR = "正式岗位";
     private NewsListContract.View mView;
     private List<Recruitment> list = new ArrayList<>();
-    Handler mHandler = new Handler(Looper.getMainLooper()){
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case ON_SUCCESS:
-                    mView.showView();
-                    break;
-                case ON_FAILURE:
-                    mView.retry();
-                    break;
-                default:
-                    super.handleMessage(msg);
-                    break;
-            }
-        }
-    };
+
 
     public NewsListPresenter(NewsListContract.View view) {
         mView = view;
     }
     @Override
     public void loadData(final String hint) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                getList(hint);
-            }
-        }).start();
-
+        List<Recruitment> list = getList(hint);
     }
 
     @Override
@@ -70,27 +64,33 @@ public class NewsListPresenter implements NewsListContract.Presenter{
     }
 
     private List<Recruitment> getList(String tab) {
+        switch (tab) {
+            case INNER_RECRUITMENT_HINT:
 
-        String url = "http://kmlg.bibibi.net/module/getcareers?start_page=1&keyword=&type=inner&day=&count=15&start=2&_=1505306588928";
-        HttpUtil.sendOkHttpRequest(url, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                mHandler.sendEmptyMessage(ON_FAILURE);
-            }
+        }
 
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                final String responseText = response.body().string();
-                Gson gson = new Gson();
-                Career career = gson.fromJson(responseText, Career.class);
-                list = career.getData();
-                mView.setList(list);
-                Log.d("GSON", ""+list.toString());
-                mHandler.sendEmptyMessage(ON_SUCCESS);
-            }
-        });
+        ServiceManager.getInstance()
+                .getCareerService()
+                .getCareers("inner", "", 10, 1)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Career<List<Recruitment>>>() {
+                    @Override
+                    public void onCompleted() {
 
+                    }
 
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(Career<List<Recruitment>> listCareer) {
+                        mView.setList(listCareer.getData());
+                        mView.showView();
+                    }
+                });
         return list;
     }
 }
