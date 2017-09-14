@@ -26,18 +26,12 @@ public interface CareerService {
                                                      @Query("day") String date,
                                                      @Query("count") int count,
                                                      @Query("start") int start);
-
     @GET("getjobfairs?")
-    Observable<Career<List<Recruitment>>> getjobfairs(@Query("type") String type,
-                                                      @Query("day") String date,
-                                                      @Query("count") int count,
+    Observable<Career<List<Recruitment>>> getjobfairs(@Query("count") int count,
                                                       @Query("start") int start);
 
     @GET("getjobfairs?")
     Observable<Career<List<Recruitment>>> getjobfairs(@Query("is_total" )int isTotal,
-                                                     @Query("type") String type,
-                                                     @Query("day") String date,
-                                                     @Query("count") int count,
-                                                     @Query("start") int start);
-
+                                                      @Query("count") int count,
+                                                      @Query("start") int start);
 }

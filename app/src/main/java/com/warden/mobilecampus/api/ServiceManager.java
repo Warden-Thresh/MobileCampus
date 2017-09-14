@@ -23,6 +23,9 @@ public class ServiceManager {
     public CareerService getCareerService() {
         return getRetrofit(UrlUtil.CARRE_BASE_URL).create(CareerService.class);
     }
+    public JobFairsService getJobFairsServic(){
+        return getRetrofit(UrlUtil.CARRE_BASE_URL).create(JobFairsService.class);
+    }
     private Retrofit getRetrofit(String baseUrl) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)

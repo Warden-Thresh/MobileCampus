@@ -19,6 +19,8 @@ public interface NewsListContract {
 
         void loadAndRefresh(String hint);
 
+        void showView();
+
         void loadMoreData(String hint);
     }
 }
