@@ -56,7 +56,160 @@ public  class Recruitment {
     private String is_recommend;
     private String recommend_time;
     private String meet_day;
+    private String fair_id;
+    private String inner_school;
+    private String type;
+    private String is_online;
+    private String title;
+    private String organisers;
+    private String fact_c_count;
+    private String plan_c_count;
+    private String is_inner;
+    private boolean is_over;
+    private String school_cnt;
+    private String internet_cnt;
+    private int total;
+    private String content;
+    private String job_recruitment;
 
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getJob_recruitment() {
+        return job_recruitment;
+    }
+
+    public void setJob_recruitment(String job_recruitment) {
+        this.job_recruitment = job_recruitment;
+    }
+
+    public String getLogo_url() {
+        return logo_url;
+    }
+
+    public void setLogo_url(String logo_url) {
+        this.logo_url = logo_url;
+    }
+
+    public String getRecruit_type() {
+        return recruit_type;
+    }
+
+    public void setRecruit_type(String recruit_type) {
+        this.recruit_type = recruit_type;
+    }
+
+    private String logo_url;
+    private String recruit_type;
+
+    public String getFair_id() {
+        return fair_id;
+    }
+
+    public void setFair_id(String fair_id) {
+        this.fair_id = fair_id;
+    }
+
+    public String getInner_school() {
+        return inner_school;
+    }
+
+    public void setInner_school(String inner_school) {
+        this.inner_school = inner_school;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getIs_online() {
+        return is_online;
+    }
+
+    public void setIs_online(String is_online) {
+        this.is_online = is_online;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getOrganisers() {
+        return organisers;
+    }
+
+    public void setOrganisers(String organisers) {
+        this.organisers = organisers;
+    }
+
+    public String getFact_c_count() {
+        return fact_c_count;
+    }
+
+    public void setFact_c_count(String fact_c_count) {
+        this.fact_c_count = fact_c_count;
+    }
+
+    public String getPlan_c_count() {
+        return plan_c_count;
+    }
+
+    public void setPlan_c_count(String plan_c_count) {
+        this.plan_c_count = plan_c_count;
+    }
+
+    public String getIs_inner() {
+        return is_inner;
+    }
+
+    public void setIs_inner(String is_inner) {
+        this.is_inner = is_inner;
+    }
+
+    public boolean isIs_over() {
+        return is_over;
+    }
+
+    public void setIs_over(boolean is_over) {
+        this.is_over = is_over;
+    }
+
+    public String getSchool_cnt() {
+        return school_cnt;
+    }
+
+    public void setSchool_cnt(String school_cnt) {
+        this.school_cnt = school_cnt;
+    }
+
+    public String getInternet_cnt() {
+        return internet_cnt;
+    }
+
+    public void setInternet_cnt(String internet_cnt) {
+        this.internet_cnt = internet_cnt;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
+    }
     public String getOverdue() {
         return overdue;
     }

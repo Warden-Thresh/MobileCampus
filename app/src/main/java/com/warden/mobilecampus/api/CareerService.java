@@ -15,23 +15,40 @@ import rx.Observable;
 
 public interface CareerService {
     @GET("getcareers?")
-    Observable<Career<List<Recruitment>>> getCareers(@Query("type") String type,
+    Observable<Career> getCareers(@Query("type") String type,
                                   @Query("day") String date,
+                                  @Query("start_page")int start_page,
                                   @Query("count") int count,
                                   @Query("start") int start);
 
     @GET("getcareers?")
-    Observable<Career<List<Recruitment>>> getCareers(@Query("is_total" )int isTotal,
-                                                     @Query("type") String type,
-                                                     @Query("day") String date,
-                                                     @Query("count") int count,
-                                                     @Query("start") int start);
-    @GET("getjobfairs?")
-    Observable<Career<List<Recruitment>>> getjobfairs(@Query("count") int count,
-                                                      @Query("start") int start);
+    Observable<Career> getCareers(@Query("is_total" )int isTotal,
+                                  @Query("type") String type,
+                                  @Query("day") String date,
+                                  @Query("start_page")int start_page,
+                                  @Query("count") int count,
+                                  @Query("start") int start);
 
     @GET("getjobfairs?")
-    Observable<Career<List<Recruitment>>> getjobfairs(@Query("is_total" )int isTotal,
-                                                      @Query("count") int count,
-                                                      @Query("start") int start);
+    Observable<Career> getjobfairs(@Query("start_page")int start_page,
+                                   @Query("count") int count,
+                                   @Query("start") int start);
+
+    @GET("getjobfairs?")
+    Observable<Career> getjobfairs(@Query("is_total" )int isTotal,
+                                   @Query("type") String type,
+                                   @Query("day") String date,
+                                   @Query("start_page")int start_page,
+                                   @Query("count") int count,
+                                   @Query("start") int start);
+    @GET("getonlines?")
+    Observable<Career> getOnlines( @Query("start_page")int start_page,
+                                   @Query("count") int count,
+                                   @Query("start") int start);
+
+    @GET("getjobs?")
+    Observable<Career> getJobs( @Query("start_page")int start_page,
+                                   @Query("count") int count,
+                                   @Query("start") int start);
+
 }

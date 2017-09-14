@@ -17,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.warden.mobilecampus.R;
-import com.warden.mobilecampus.adapter.NewsAdapter;
 import com.warden.mobilecampus.adapter.NewsListAdapter;
 import com.warden.mobilecampus.bean.Recruitment;
 import com.warden.mobilecampus.contract.NewsListContract;
@@ -44,9 +43,10 @@ public class NewsListFragment extends Fragment implements NewsListContract.View 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+
     private NewsListPresenter mNewsListPresenter;
     private NewsListAdapter adapter;
-    private List<Recruitment> recruitmentList = new ArrayList<>();
+    private List recruitmentList = new ArrayList<>();
     Unbinder unbinder;
     @BindView(R.id.news_list_rv)
     RecyclerView newsListRv;
@@ -140,7 +140,7 @@ public class NewsListFragment extends Fragment implements NewsListContract.View 
 
     @Override
     public void showView() {
-        newsListPb.setVisibility(View.GONE);
+        newsListLoadLl.setVisibility(View.GONE);
 
         newsListSrl.setVisibility(View.VISIBLE);
         newsListSrl.setProgressBackgroundColorSchemeResource(android.R.color.white);
@@ -159,7 +159,7 @@ public class NewsListFragment extends Fragment implements NewsListContract.View 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayout.VERTICAL, false);
         newsListRv.setLayoutManager(linearLayoutManager);
         newsListRv.setItemAnimator(new DefaultItemAnimator());
-        adapter = new NewsListAdapter(getActivity(), recruitmentList);
+        adapter = new NewsListAdapter(getActivity(), recruitmentList,mHint);
         newsListRv.setAdapter(adapter);
     }
 

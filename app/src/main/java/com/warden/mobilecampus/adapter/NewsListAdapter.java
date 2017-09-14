@@ -28,9 +28,12 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private Context mContext;
     private List<Recruitment> mRecruitmentList;
     private View headerView;
-    public NewsListAdapter(Context context, List<Recruitment> list){
+    private String mHint;
+    public NewsListAdapter(Context context, List<Recruitment> list,String hint){
         mContext = context;
+        mHint = hint;
         mRecruitmentList = list;
+
     }
 
     public void setHeaderView(View headerView) {
@@ -57,6 +60,10 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             TextView view = (TextView) LayoutInflater.from(mContext).inflate(R.layout.layout_footer, parent, false);
             return new ViewHolderFooter(view);
         }
+        if (mHint.equals("双选会")) {
+            View view = LayoutInflater.from(mContext).inflate(R.layout.item_news_list_rv_jobfair, parent, false);
+            return new ViewHolderNormal(view);
+        }
         View view = LayoutInflater.from(mContext).inflate(R.layout.item_news_list_rv, parent, false);
         return new ViewHolderNormal(view);
     }
@@ -76,10 +83,15 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             final int pos = getRealPosition(holder);
             final Recruitment recruitment = mRecruitmentList.get(pos);
             ViewHolderNormal holderNormal = (ViewHolderNormal) holder;
-            holderNormal.tv_title.setText(recruitment.getCompany_name());
+            if (mHint.equals("双选会")){
+                holderNormal.tv_title.setText(recruitment.getTitle());
+            }else {
+                Glide.with(mContext).load(recruitment.getLogo()).into(holderNormal.iv_item_news_detail_rv);
+                holderNormal.tv_title.setText(recruitment.getCompany_name());
+            }
+
             holderNormal.tv_author.setText(recruitment.getAddress());
             holderNormal.tv_zan.setText(recruitment.getView_count());
-            Glide.with(mContext).load(recruitment.getLogo()).into(holderNormal.iv_item_news_detail_rv);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

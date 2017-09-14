@@ -7,6 +7,8 @@ import com.warden.mobilecampus.bean.Recruitment;
 
 import java.util.List;
 
+
+import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -26,77 +28,51 @@ public class CareerModel implements ICareerModel {
     private CareerService careerService = serviceManager.getCareerService();
     @Override
     public void getRecruitmentList(String hint, final ModelListener listener) {
-        switch (hint) {
-            case INNER_RECRUITMENT_HINT:
-                careerService
-                        .getCareers("inner", "", 10, 1)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Subscriber<Career<List<Recruitment>>>() {
-                            @Override
-                            public void onCompleted() {
+        Subscriber subscriber = new Subscriber<Career>() {
+            @Override
+            public void onCompleted() {
 
-                            }
+            }
 
-                            @Override
-                            public void onError(Throwable e) {
-                                e.printStackTrace();
-                            }
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+            }
 
-                            @Override
-                            public void onNext(Career<List<Recruitment>> listCareer) {
-                                listener.onSuccess(listCareer.getData());
-                            }
-                        });
-                break;
-            case OUTER_RECRUITMENT_HINT:
-                careerService
-                        .getCareers("outer", "", 10, 1)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Subscriber<Career<List<Recruitment>>>() {
-                            @Override
-                            public void onCompleted() {
+            @Override
+            public void onNext(Career listCareer) {
+                listener.onSuccess(listCareer.getData());
+            }
+        };
 
-                            }
+        if (hint.equals(INNER_RECRUITMENT_HINT) || hint.equals(OUTER_RECRUITMENT_HINT)) {
+            String type = hint.equals(INNER_RECRUITMENT_HINT) ? "inner" : "outer";
+            careerService
+                    .getCareers(type, "",1, 10, 1)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(subscriber);
 
-                            @Override
-                            public void onError(Throwable e) {
-                                e.printStackTrace();
-                            }
+        } else if (hint.equals(JOB_FAIRS_HINT)) {
+            careerService
+                    .getjobfairs(1,10,1)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(subscriber);
+        } else if (hint.equals(ONLINE_RECRUITMENT)) {
+            careerService
+                    .getOnlines(1, 10, 1)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(subscriber);
 
-                            @Override
-                            public void onNext(Career<List<Recruitment>> listCareer) {
-                                listener.onSuccess(listCareer.getData());
-                            }
-                        });
-                break;
-            case JOB_FAIRS_HINT:
-                careerService
-                        .getjobfairs(10,1)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Subscriber<Career<List<Recruitment>>>() {
-                            @Override
-                            public void onCompleted() {
+        } else if (hint.equals(JOBS_HINR)) {
+            careerService
+                    .getJobs(1, 10, 1)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(subscriber);
 
-                            }
-
-                            @Override
-                            public void onError(Throwable e) {
-                                e.printStackTrace();
-                            }
-
-                            @Override
-                            public void onNext(Career<List<Recruitment>> listCareer) {
-                                listener.onSuccess(listCareer.getData());
-                            }
-                        });
-                break;
-            case ONLINE_RECRUITMENT:
-                break;
-            case JOBS_HINR:
-                break;
         }
     }
 
@@ -105,5 +81,10 @@ public class CareerModel implements ICareerModel {
         void onSuccess(List<Recruitment> list);
 
         void onFailure();
+    }
+
+    private void sendRequest(String hint) {
+
+
     }
 }

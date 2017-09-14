@@ -1,12 +1,14 @@
 package com.warden.mobilecampus.bean;
 
+import com.warden.mobilecampus.api.JobFairsService;
+
 import java.util.List;
 
 /**
  * Created by Warden on 2017/9/13.
  */
 
-public class Career<T> {
+public class Career {
 
     /**
      * code : 1
@@ -17,6 +19,7 @@ public class Career<T> {
     private int code;
     private String msg;
     private List<Recruitment> data;
+    private List<Career> careers;
 
     public int getCode() {
         return code;

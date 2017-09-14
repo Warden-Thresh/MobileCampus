@@ -15,13 +15,13 @@ import rx.Observable;
 
 public interface JobFairsService {
     @GET("getjobfairs?")
-    Observable<Career<List<Recruitment>>> getjobfairs(@Query("type") String type,
+    Observable<Career> getjobfairs(@Query("type") String type,
                                                       @Query("day") String date,
                                                       @Query("count") int count,
                                                       @Query("start") int start);
 
     @GET("getjobfairs?")
-    Observable<Career<List<Recruitment>>> getjobfairs(@Query("is_total" )int isTotal,
+    Observable<Career> getjobfairs(@Query("is_total" )int isTotal,
                                                       @Query("type") String type,
                                                       @Query("day") String date,
                                                       @Query("count") int count,
