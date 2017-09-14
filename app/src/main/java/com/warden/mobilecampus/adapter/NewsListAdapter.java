@@ -83,11 +83,15 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             final int pos = getRealPosition(holder);
             final Recruitment recruitment = mRecruitmentList.get(pos);
             ViewHolderNormal holderNormal = (ViewHolderNormal) holder;
+            holderNormal.tv_title.setText(recruitment.getCompany_name());
             if (mHint.equals("双选会")){
                 holderNormal.tv_title.setText(recruitment.getTitle());
-            }else {
+            } else if (mHint.equals("正式岗位")){
+                holderNormal.tv_title.setText(recruitment.getJob_name());
+            }else if (mHint.equals("在线招聘")) {
+                Glide.with(mContext).load(recruitment.getLogo_url()).into(holderNormal.iv_item_news_detail_rv);
+            } else {
                 Glide.with(mContext).load(recruitment.getLogo()).into(holderNormal.iv_item_news_detail_rv);
-                holderNormal.tv_title.setText(recruitment.getCompany_name());
             }
 
             holderNormal.tv_author.setText(recruitment.getAddress());

@@ -71,6 +71,15 @@ public  class Recruitment {
     private int total;
     private String content;
     private String job_recruitment;
+    private String job_name;
+
+    public String getJob_name() {
+        return job_name;
+    }
+
+    public void setJob_name(String job_name) {
+        this.job_name = job_name;
+    }
 
     public String getContent() {
         return content;
