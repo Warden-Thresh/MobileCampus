@@ -72,6 +72,70 @@ public  class Recruitment {
     private String content;
     private String job_recruitment;
     private String job_name;
+    private String publish_time;
+    private String degree_require;
+    private String salary;
+    private String job_number;
+    private String recruitment_id;
+    private String publish_id;
+
+    public String getPublish_id() {
+        return publish_id;
+    }
+
+    public void setPublish_id(String publish_id) {
+        this.publish_id = publish_id;
+    }
+
+    public String getRecruitment_id() {
+        return recruitment_id;
+    }
+
+    public void setRecruitment_id(String recruitment_id) {
+        this.recruitment_id = recruitment_id;
+    }
+
+    public String getPublish_time() {
+        return publish_time;
+    }
+
+    public void setPublish_time(String publish_time) {
+        this.publish_time = publish_time;
+    }
+
+    public String getDegree_require() {
+        return degree_require;
+    }
+
+    public void setDegree_require(String degree_require) {
+        this.degree_require = degree_require;
+    }
+
+    public String getSalary() {
+        return salary;
+    }
+
+    public void setSalary(String salary) {
+        this.salary = salary;
+    }
+
+    public String getJob_number() {
+        return job_number;
+    }
+
+    public void setJob_number(String job_number) {
+        this.job_number = job_number;
+    }
+
+    public String getCreate_time() {
+        return create_time;
+    }
+
+    public void setCreate_time(String create_time) {
+        this.create_time = create_time;
+    }
+
+    private String create_time;
 
     public String getJob_name() {
         return job_name;

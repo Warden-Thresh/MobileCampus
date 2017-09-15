@@ -11,13 +11,15 @@
     android:layout_marginStart="5dp"
     android:clickable="true"
     android:focusable="true"
-    android:longClickable="true">
+    android:longClickable="true"
+    android:background="?android:attr/selectableItemBackground">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:padding="10dp"
+        android:background="?android:attr/selectableItemBackground">
 
 
         <RelativeLayout
@@ -76,7 +78,7 @@
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/tv_author_news_detail"
+                android:id="@+id/tv_address_news_detail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_detail_news_detail"
@@ -91,7 +93,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_detail_news_detail"
                 android:layout_marginLeft="3dp"
-                android:layout_toRightOf="@+id/tv_author_news_detail"
+                android:layout_toRightOf="@+id/tv_address_news_detail"
                 android:gravity="right"
                 android:paddingLeft="5dp"
                 android:paddingTop="16dp"

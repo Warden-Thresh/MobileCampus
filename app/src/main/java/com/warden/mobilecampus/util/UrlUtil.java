@@ -6,6 +6,7 @@ package com.warden.mobilecampus.util;
 
 public class UrlUtil {
     public static final String CARRE_BASE_URL = "http://kmlg.bibibi.net/module/";
+    public static final String DETAIL_BASE_URL = "http://kmlg.bibibi.net/detail/";
 
 
 }

@@ -1,6 +1,7 @@
 package com.warden.mobilecampus.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.warden.mobilecampus.R;
 import com.warden.mobilecampus.bean.Recruitment;
+import com.warden.mobilecampus.util.UrlUtil;
+import com.warden.mobilecampus.view.activity.DetailActivity;
 
 import java.util.List;
 
@@ -96,28 +99,62 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             final int pos = getRealPosition(holder);
             final Recruitment recruitment = mRecruitmentList.get(pos);
             ViewHolderNormal holderNormal = (ViewHolderNormal) holder;
+            String detail = recruitment.getCompany_property()+"\n" +recruitment.getIndustry_category();
+            String address = recruitment.getSchool_name() + "\n" + recruitment.getAddress();
+            String date = recruitment.getMeet_day() +" "+ recruitment.getMeet_time();
             holderNormal.tv_title.setText(recruitment.getCompany_name());
+            holderNormal.tv_time.setText(date);
+            holderNormal.tv_detail.setText(detail);
+            holderNormal.tv_address.setText(address);
+            holderNormal.tv_zan.setText(recruitment.getView_count());
             if (mHint.equals("双选会")){
                 holderNormal.tv_title.setText(recruitment.getTitle());
+                String jobfairDetail = "参与企业" + recruitment.getPlan_c_count() + "家" + "\n" + "主办方：" + recruitment.getOrganisers();
+                holderNormal.tv_detail.setText(jobfairDetail);
             } else if (mHint.equals("正式岗位")){
+                String jobDetail = recruitment.getSalary() + "\n" + recruitment.getIndustry_category();
+                String require = recruitment.getCity_name() + "/" + recruitment.getDegree_require() + "/招聘" + recruitment.getJob_number() + "人";
+                holderNormal.tv_detail.setText(jobDetail);
+                holderNormal.tv_address.setText(require);
                 holderNormal.tv_title.setText(recruitment.getJob_name());
+                holderNormal.tv_time.setText(recruitment.getPublish_time());
+                Glide.with(mContext).load(recruitment.getLogo_url()).into(holderNormal.iv_item_news_detail_rv);
             }else if (mHint.equals("在线招聘")) {
+                String onlineDetail = "需求专业：" + recruitment.getProfessionals() + "\n需求岗位" + recruitment.getJob_recruitment();
+                holderNormal.tv_detail.setText(onlineDetail);
+                holderNormal.tv_time.setText(recruitment.getCreate_time());
+                holderNormal.tv_title.setText(recruitment.getTitle());
+                ((ViewHolderNormal) holder).tv_address.setVisibility(View.GONE);
                 Glide.with(mContext).load(recruitment.getLogo_url()).into(holderNormal.iv_item_news_detail_rv);
             } else {
                 Glide.with(mContext).load(recruitment.getLogo()).into(holderNormal.iv_item_news_detail_rv);
             }
-
-            String detail = recruitment.getCompany_property()+"\n" +recruitment.getIndustry_category();
-            String address = recruitment.getSchool_name() + "\n" + recruitment.getAddress();
-            String date = recruitment.getMeet_day() + recruitment.getMeet_time();
-            holderNormal.tv_time.setText(date);
-            holderNormal.tv_detail.setText(detail);
-            holderNormal.tv_author.setText(address);
-            holderNormal.tv_zan.setText(recruitment.getView_count());
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(mContext,recruitment.getCompany_name(), Toast.LENGTH_SHORT).show();
+                    String id =recruitment.getCareer_talk_id();
+                    String type="career";
+                    switch (mHint) {
+                        case "双选会":
+                            id = recruitment.getFair_id();
+                            type = "jobfair";
+                            break;
+                        case "在线招聘":
+                            id = recruitment.getRecruitment_id();
+                            type = "onlines";
+                            break;
+                        case "正式岗位":
+                            id = recruitment.getPublish_id();
+                            type = "job";
+                            break;
+                        default:
+                            break;
+                    }
+                    String url = UrlUtil.DETAIL_BASE_URL + type + "?id=" + id;
+                    Intent intent = new Intent(mContext, DetailActivity.class);
+                    intent.putExtra("url", url);
+                    mContext.startActivity(intent);
+
                 }
             });
         }
@@ -145,7 +182,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public class ViewHolderNormal extends RecyclerView.ViewHolder {
         private ImageView iv_item_news_detail_rv;
         private TextView tv_title;
-        private TextView tv_author;
+        private TextView tv_address;
         private TextView tv_zan;
         private TextView tv_detail;
         private TextView tv_time;
@@ -156,7 +193,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             tv_detail = (TextView) itemView.findViewById(R.id.tv_detail_news_detail);
             iv_item_news_detail_rv = (ImageView) itemView.findViewById(R.id.iv_item_news_detail_rv);
             tv_title = (TextView) itemView.findViewById(R.id.tv_title_news_detail);
-            tv_author = (TextView) itemView.findViewById(R.id.tv_author_news_detail);
+            tv_address = (TextView) itemView.findViewById(R.id.tv_address_news_detail);
             tv_zan = (TextView) itemView.findViewById(R.id.tv_zan_news_detail);
             tv_time = (TextView) itemView.findViewById(R.id.tv_time_news_detail);
         }

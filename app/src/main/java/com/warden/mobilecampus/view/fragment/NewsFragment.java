@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.PopupWindow;
 
 import com.warden.mobilecampus.adapter.NewsAdapter;
@@ -44,7 +45,7 @@ public class NewsFragment extends Fragment {
     @BindView(R.id.tab_news)
     TabLayout newsTab;
     @BindView(R.id.btn_tab_select)
-    Button btnTabSelect;
+    ImageButton btnTabSelect;
     @BindView(R.id.vp_news)
     ViewPager newsViewPage;
     private PopupWindow popupWindow;
@@ -53,6 +54,7 @@ public class NewsFragment extends Fragment {
     private List<String> otherChannels;
 
     private NewsAdapter vpAdapter;
+
     private RecyclerView PopRecyclerView;
     Unbinder unbinder;
 
