@@ -1,5 +1,7 @@
 package com.warden.mobilecampus.model;
 
+import android.util.Log;
+
 import com.warden.mobilecampus.api.CareerService;
 import com.warden.mobilecampus.api.ServiceManager;
 import com.warden.mobilecampus.bean.Career;
@@ -27,7 +29,8 @@ public class CareerModel implements ICareerModel {
     private ServiceManager serviceManager = ServiceManager.getInstance();
     private CareerService careerService = serviceManager.getCareerService();
     @Override
-    public void getRecruitmentList(String hint, final ModelListener listener) {
+    public void getRecruitmentList(String hint,int page, final ModelListener listener) {
+        Log.d("Request", "hint:" + hint + "\npage:" + page);
         Subscriber subscriber = new Subscriber<Career>() {
             @Override
             public void onCompleted() {
@@ -36,39 +39,40 @@ public class CareerModel implements ICareerModel {
 
             @Override
             public void onError(Throwable e) {
-                e.printStackTrace();
+                listener.onFailure();
             }
 
             @Override
             public void onNext(Career listCareer) {
                 listener.onSuccess(listCareer.getData());
+                Log.d("log:", listCareer.getCode() + "");
             }
         };
 
         if (hint.equals(INNER_RECRUITMENT_HINT) || hint.equals(OUTER_RECRUITMENT_HINT)) {
             String type = hint.equals(INNER_RECRUITMENT_HINT) ? "inner" : "outer";
             careerService
-                    .getCareers(type, "",1, 10, 1)
+                    .getCareers(type, "",1, 10, page)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(subscriber);
 
         } else if (hint.equals(JOB_FAIRS_HINT)) {
             careerService
-                    .getjobfairs(1,10,1)
+                    .getjobfairs(1,10,page)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(subscriber);
         } else if (hint.equals(ONLINE_RECRUITMENT)) {
             careerService
-                    .getOnlines(1, 10, 1)
+                    .getOnlines(1, 10, page)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(subscriber);
 
         } else if (hint.equals(JOBS_HINR)) {
             careerService
-                    .getJobs(1, 10, 1)
+                    .getJobs(1, 10, page)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(subscriber);

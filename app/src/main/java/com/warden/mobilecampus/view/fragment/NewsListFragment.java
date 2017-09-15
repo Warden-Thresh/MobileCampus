@@ -59,6 +59,8 @@ public class NewsListFragment extends Fragment implements NewsListContract.View 
     @BindView(R.id.news_list_retry_btn)
     Button newsListRetryBtn;
     private int page = 1;
+    int lastVisibleItem = 0;
+    LinearLayoutManager linearLayoutManager;
 
     // TODO: Rename and change types of parameters
     private String mHint;
@@ -75,7 +77,6 @@ public class NewsListFragment extends Fragment implements NewsListContract.View 
      * this fragment using the provided parameters.
      *
      * @param hint   栏目.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment NewsListFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -156,11 +157,29 @@ public class NewsListFragment extends Fragment implements NewsListContract.View 
             }
         });
         newsListRv.setVisibility(View.VISIBLE);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayout.VERTICAL, false);
+        linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayout.VERTICAL, false);
         newsListRv.setLayoutManager(linearLayoutManager);
         newsListRv.setItemAnimator(new DefaultItemAnimator());
         adapter = new NewsListAdapter(getActivity(), recruitmentList,mHint);
+
         newsListRv.setAdapter(adapter);
+
+        newsListRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE&&lastVisibleItem+1==adapter.getItemCount()){
+                    page += 1;
+                    mNewsListPresenter.loadMoreData(mHint,page);
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                lastVisibleItem =linearLayoutManager.findLastVisibleItemPosition();
+            }
+        });
     }
 
     @Override
@@ -171,6 +190,17 @@ public class NewsListFragment extends Fragment implements NewsListContract.View 
     @Override
     public void setList(List list) {
         recruitmentList = list;
+    }
+
+    @Override
+    public void addList(List list) {
+        adapter.addList(list);
+    }
+
+    @Override
+    public void changeList(List list) {
+        adapter.changeList(list);
+        newsListSrl.setRefreshing(false);
     }
 
     /**

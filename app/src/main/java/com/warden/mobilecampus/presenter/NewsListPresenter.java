@@ -41,6 +41,7 @@ public class NewsListPresenter implements NewsListContract.Presenter {
 
     private NewsListContract.View mView;
     private ICareerModel iCareerModel;
+    private CareerModel.ModelListener listener;
     private List<Recruitment> recruitmentList = new ArrayList<>();
 
     public NewsListPresenter(NewsListContract.View view) {
@@ -50,7 +51,7 @@ public class NewsListPresenter implements NewsListContract.Presenter {
 
     @Override
     public void loadData(String hint) {
-        iCareerModel.getRecruitmentList(hint, new CareerModel.ModelListener() {
+        iCareerModel.getRecruitmentList(hint,1, new CareerModel.ModelListener() {
             @Override
             public void onSuccess(List<Recruitment> list) {
                 mView.setList(list);
@@ -62,13 +63,21 @@ public class NewsListPresenter implements NewsListContract.Presenter {
                 mView.retry();
             }
         });
-
-
     }
 
     @Override
     public void loadAndRefresh(String hint) {
+        iCareerModel.getRecruitmentList(hint,1, new CareerModel.ModelListener() {
+            @Override
+            public void onSuccess(List<Recruitment> list) {
+                mView.changeList(list);
+            }
 
+            @Override
+            public void onFailure() {
+
+            }
+        });
     }
 
     @Override
@@ -77,7 +86,17 @@ public class NewsListPresenter implements NewsListContract.Presenter {
     }
 
     @Override
-    public void loadMoreData(String hint) {
+    public void loadMoreData(String hint,int page) {
+        iCareerModel.getRecruitmentList(hint,page, new CareerModel.ModelListener() {
+            @Override
+            public void onSuccess(List<Recruitment> list) {
+               mView.addList(list);
+            }
 
+            @Override
+            public void onFailure() {
+                mView.retry();
+            }
+        });
     }
 }

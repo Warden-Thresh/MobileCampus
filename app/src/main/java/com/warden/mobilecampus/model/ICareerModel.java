@@ -9,5 +9,5 @@ import java.util.List;
  */
 
 public interface ICareerModel {
-   void getRecruitmentList(String hint, CareerModel.ModelListener listener);
+   void getRecruitmentList(String hint,int page, CareerModel.ModelListener listener);
 }

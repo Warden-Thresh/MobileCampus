@@ -13,6 +13,12 @@ public interface NewsListContract {
         void retry();
 
         void setList(List<T> list);
+
+        void addList(List<T> list);
+
+        void changeList(List<T> list);
+
+
     }
     interface Presenter{
         void loadData(String hint);
@@ -21,6 +27,6 @@ public interface NewsListContract {
 
         void showView();
 
-        void loadMoreData(String hint);
+        void loadMoreData(String hint,int page);
     }
 }

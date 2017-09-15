@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +26,9 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public final int NORMAL = 1;
     public final int MULTIIMAGE = 2;
     public final int FOOTER = 3;
+    public static final int LOADING = 5;
+    public static final int NO_MORE_DATA = 6;
+    private int load_status = LOADING;
     private Context mContext;
     private List<Recruitment> mRecruitmentList;
     private View headerView;
@@ -57,7 +61,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             Log.d("holder","header");
             return new ViewHolderNormal(headerView);
         } else if (viewType ==FOOTER){
-            TextView view = (TextView) LayoutInflater.from(mContext).inflate(R.layout.layout_footer, parent, false);
+            View view =  LayoutInflater.from(mContext).inflate(R.layout.layout_footer, parent, false);
             return new ViewHolderFooter(view);
         }
         if (mHint.equals("双选会")) {
@@ -74,8 +78,17 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             return;
         }
         if (getItemViewType(position) == FOOTER) {
-            ViewHolderFooter footerHolder = (ViewHolderFooter) holder;
-            footerHolder.text.setText("shuaxc");
+            ViewHolderFooter holderFooter = (ViewHolderFooter) holder;
+            switch (load_status) {
+                case LOADING:
+                    holderFooter.progressBar.setVisibility(View.VISIBLE);
+                    holderFooter.text.setText("正在加载");
+                    break;
+                case NO_MORE_DATA:
+                    holderFooter.progressBar.setVisibility(View.GONE);
+                    holderFooter.text.setText("没有更多数据");
+                    break;
+            }
             return;
         }
 
@@ -94,7 +107,12 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 Glide.with(mContext).load(recruitment.getLogo()).into(holderNormal.iv_item_news_detail_rv);
             }
 
-            holderNormal.tv_author.setText(recruitment.getAddress());
+            String detail = recruitment.getCompany_property()+"\n" +recruitment.getIndustry_category();
+            String address = recruitment.getSchool_name() + "\n" + recruitment.getAddress();
+            String date = recruitment.getMeet_day() + recruitment.getMeet_time();
+            holderNormal.tv_time.setText(date);
+            holderNormal.tv_detail.setText(detail);
+            holderNormal.tv_author.setText(address);
             holderNormal.tv_zan.setText(recruitment.getView_count());
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -105,7 +123,7 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
     }
 
-    public void updateList(List<Recruitment> list) {
+    public void changeList(List<Recruitment> list) {
         mRecruitmentList.clear();
         mRecruitmentList.addAll(list);
         notifyDataSetChanged();
@@ -113,7 +131,11 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public void addList(List<Recruitment> list) {
         mRecruitmentList.addAll(list);
+        if (list.size() < 1) {
+            load_status = NO_MORE_DATA;
+        }
         notifyDataSetChanged();
+
     }
 
     @Override
@@ -125,24 +147,30 @@ public class NewsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         private TextView tv_title;
         private TextView tv_author;
         private TextView tv_zan;
+        private TextView tv_detail;
+        private TextView tv_time;
 
         public ViewHolderNormal(View itemView) {
             super(itemView);
             if (itemView == headerView) return;
+            tv_detail = (TextView) itemView.findViewById(R.id.tv_detail_news_detail);
             iv_item_news_detail_rv = (ImageView) itemView.findViewById(R.id.iv_item_news_detail_rv);
             tv_title = (TextView) itemView.findViewById(R.id.tv_title_news_detail);
             tv_author = (TextView) itemView.findViewById(R.id.tv_author_news_detail);
             tv_zan = (TextView) itemView.findViewById(R.id.tv_zan_news_detail);
+            tv_time = (TextView) itemView.findViewById(R.id.tv_time_news_detail);
         }
     }
 
 
     public class ViewHolderFooter extends RecyclerView.ViewHolder {
         private TextView text;
+        private ProgressBar progressBar;
 
         public ViewHolderFooter(View itemView) {
             super(itemView);
-            text = (TextView) itemView;
+            text = (TextView) itemView.findViewById(R.id.tv_footer);
+            progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar2);
         }
     }
     private int getRealPosition(RecyclerView.ViewHolder holder) {
